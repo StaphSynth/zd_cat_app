@@ -22488,32 +22488,127 @@ var App = function (_React$Component) {
           account = _props$context.account,
           ticketId = _props$context.ticketId;
 
-      return _react2.default.createElement(
-        'ul',
-        null,
-        _react2.default.createElement(
-          'li',
-          null,
-          product
-        ),
-        _react2.default.createElement(
-          'li',
-          null,
-          account.subdomain
-        ),
-        _react2.default.createElement(
-          'li',
-          null,
-          ticketId
-        )
-      );
+      return _react2.default.createElement(Cat, null);
     }
   }]);
 
   return App;
 }(_react2.default.Component);
 
+var Cat = function (_React$Component2) {
+  _inherits(Cat, _React$Component2);
+
+  function Cat(props) {
+    _classCallCheck(this, Cat);
+
+    var _this2 = _possibleConstructorReturn(this, (Cat.__proto__ || Object.getPrototypeOf(Cat)).call(this, props));
+
+    _this2.getCat = _this2.getCat.bind(_this2);
+    _this2.state = { cat: null };
+    _this2.getCat();
+    return _this2;
+  }
+
+  _createClass(Cat, [{
+    key: 'getCat',
+    value: function getCat() {
+      var _this3 = this;
+
+      _AjaxWrapper2.default.get({
+        url: 'https://thecatapi.com/api/images/get',
+        data: {
+          size: 'small',
+          format: 'html',
+          type: 'jpg,gif,png'
+        },
+        return: 'html',
+        success: function success(response) {
+          _this3.setState({ cat: response });
+        },
+        failure: function failure(response) {
+          console.log('Cat API failure', response);
+        }
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var cat = this.state.cat;
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement('div', { dangerouslySetInnerHTML: cat ? { __html: cat } : { __html: '<p>Waiting for your cat...</p>' } }),
+        _react2.default.createElement(
+          'button',
+          { onClick: this.getCat },
+          'New cat!'
+        )
+      );
+    }
+  }]);
+
+  return Cat;
+}(_react2.default.Component);
+
 exports.default = App;
+
+/***/ }),
+/* 187 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Ajax = function Ajax() {
+  _classCallCheck(this, Ajax);
+};
+
+/*performs a GET req. Accepts an options object:
+options = {
+  url: 'http://api.example.com',
+  data: {your_param: value, another_param: value},
+  return: 'json', #specifies what data type to return. options are text, json, blob. defaults to text
+  success: callback function,
+  failure: callback function
+}*/
+
+
+exports.default = Ajax;
+Ajax.get = function (options) {
+  fetch(generatePath(options)).then(function (response) {
+    switch (options.return) {
+      case 'json':
+        return response.json();
+      case 'text':
+        return response.text();
+      case 'blob':
+        return response.blob();
+      default:
+        return response.text();
+    }
+  }).then(function (data) {
+    options.success(data);
+  }).catch(function (error) {
+    options.failure(error);
+  });
+};
+
+function generatePath(options) {
+  var path = options.url;
+
+  path += '?' + Object.keys(options.data).map(function (key) {
+    return key + '=' + options.data[key];
+  }).join('&');
+
+  return encodeURI(path);
+}
 
 /***/ })
 /******/ ]);
