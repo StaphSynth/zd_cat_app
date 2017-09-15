@@ -2,8 +2,8 @@ node_modules
 bower_components
 dist/assets/main.css
 dist/assets/main.css.map
-dist/assets/main.js
-dist/assets/main.js.map
+dist/assets/app.js
+dist/assets/app.js.map
 dist/tmp/
 
 .DS_Store
