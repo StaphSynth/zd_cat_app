@@ -1,5 +1,6 @@
 import React from 'react'
-import Ajax from '../lib/AjaxWrapper';
+import Ajax from '../modules/AjaxWrapper';
+require('../css/main.css');
 
 class App extends React.Component {
   componentDidMount() {
@@ -50,12 +51,11 @@ class Cat extends React.Component {
 
   render() {
     let cat = this.state.cat;
-    let size = {maxWidth: '250px', maxHeight: '250px'};
 
     return (
       <div>
-        <div>
-          { cat ? <img src={ this.getSrc(cat) } style={ size } /> : <Spinner /> }
+        <div className="cat-container">
+          { cat ? <img className="cat" src={ this.getSrc(cat) } /> : <Spinner /> }
         </div>
         <button onClick={ this.getCat }>New cat!</button>
       </div>
@@ -65,17 +65,7 @@ class Cat extends React.Component {
 
 class Spinner extends React.Component {
   render() {
-    let style = {
-      margin: '0.5em',
-      border: '3px solid grey',
-      borderTop: '3px solid dodgerblue',
-      borderRadius: '50%',
-      animation: 'spin 1s infinite linear',
-      height: '30px',
-      width: '30px'
-    };
-    
-    return <div style={ style } />
+    return <div className="spinner"/>
   }
 }
 
