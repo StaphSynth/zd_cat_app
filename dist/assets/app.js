@@ -22481,6 +22481,12 @@ var App = function (_React$Component) {
   }
 
   _createClass(App, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var client = ZAFClient.init();
+      client.invoke('resize', { width: '300px', height: '400px' });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _props$context = this.props.context,
@@ -22505,40 +22511,59 @@ var Cat = function (_React$Component2) {
 
     _this2.getCat = _this2.getCat.bind(_this2);
     _this2.state = { cat: null };
-    _this2.getCat();
     return _this2;
   }
 
   _createClass(Cat, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.getCat();
+    }
+  }, {
     key: 'getCat',
     value: function getCat() {
       var _this3 = this;
 
-      _AjaxWrapper2.default.get({
-        url: 'https://thecatapi.com/api/images/get',
-        data: {
-          size: 'small',
-          format: 'html',
-          type: 'jpg,gif,png'
-        },
-        return: 'html',
-        success: function success(response) {
-          _this3.setState({ cat: response });
-        },
-        failure: function failure(response) {
-          console.log('Cat API failure', response);
-        }
+      this.setState({ cat: null }, function () {
+        _AjaxWrapper2.default.get({
+          url: 'https://thecatapi.com/api/images/get',
+          data: {
+            size: 'small',
+            format: 'html',
+            type: 'jpg,gif,png'
+          },
+          return: 'html',
+          success: function success(response) {
+            _this3.setState({ cat: response });
+          },
+          failure: function failure(response) {
+            console.log('Cat API failure', response);
+          }
+        });
       });
+    }
+
+    //strips the src of the img from the returned html
+
+  }, {
+    key: 'getSrc',
+    value: function getSrc(html) {
+      return html.match(/src="(.+)"/)[1];
     }
   }, {
     key: 'render',
     value: function render() {
       var cat = this.state.cat;
+      var size = { maxWidth: '250px', maxHeight: '250px' };
 
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement('div', { dangerouslySetInnerHTML: cat ? { __html: cat } : { __html: '<p>Waiting for your cat...</p>' } }),
+        _react2.default.createElement(
+          'div',
+          null,
+          cat ? _react2.default.createElement('img', { src: this.getSrc(cat), style: size }) : _react2.default.createElement(Spinner, null)
+        ),
         _react2.default.createElement(
           'button',
           { onClick: this.getCat },
@@ -22549,6 +22574,35 @@ var Cat = function (_React$Component2) {
   }]);
 
   return Cat;
+}(_react2.default.Component);
+
+var Spinner = function (_React$Component3) {
+  _inherits(Spinner, _React$Component3);
+
+  function Spinner() {
+    _classCallCheck(this, Spinner);
+
+    return _possibleConstructorReturn(this, (Spinner.__proto__ || Object.getPrototypeOf(Spinner)).apply(this, arguments));
+  }
+
+  _createClass(Spinner, [{
+    key: 'render',
+    value: function render() {
+      var style = {
+        margin: '0.5em',
+        border: '3px solid grey',
+        borderTop: '3px solid dodgerblue',
+        borderRadius: '50%',
+        animation: 'spin 1s infinite linear',
+        height: '30px',
+        width: '30px'
+      };
+
+      return _react2.default.createElement('div', { style: style });
+    }
+  }]);
+
+  return Spinner;
 }(_react2.default.Component);
 
 exports.default = App;
