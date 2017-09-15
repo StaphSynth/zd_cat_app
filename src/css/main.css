@@ -1,0 +1,31 @@
+.spinner {
+  border: 3px solid lightgrey;
+  border-top: 3px solid dodgerblue;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+  height: 30px;
+  width: 30px;
+  margin: auto;
+}
+
+@keyframes spin {
+  from {transform:rotate(0deg);}
+  to {transform:rotate(360deg);}
+}
+
+.cat-container {
+  display: block;
+  margin: auto;
+}
+
+.cat {
+  display: block;
+  margin: auto;
+  max-width: 250px;
+  max-height: 250px;
+}
+
+button {
+  display: block;
+  margin: 0 auto;
+}
